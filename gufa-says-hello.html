@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gufa.Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@300;400&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #0a0908;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gufa-wrap {
+      min-height: 600px;
+      width: 100%;
+      max-width: 560px;
+      background: #0a0908;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      padding: 4rem 2rem;
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .cave-glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(180,140,80,0.08) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+    }
+
+    .gufa-wordmark {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 20px;
+      letter-spacing: 0.3em;
+      color: #6b5a3e;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .gufa-devanagari {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-weight: 400;
+      font-size: 22px;
+      color: #c8a96e;
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      text-shadow: 0 0 24px rgba(200,169,110,0.5), 0 0 50px rgba(180,140,80,0.2);
+      position: relative;
+    }
+
+    .gufa-prompt {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: #3d3222;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .gufa-input-wrap {
+      position: relative;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.2rem;
+    }
+
+    .gufa-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 0.5px solid #3a3020;
+      color: #c8a96e;
+      font-family: 'IM Fell English', serif;
+      font-size: 26px;
+      letter-spacing: 0.2em;
+      padding: 10px 0;
+      text-align: center;
+      outline: none;
+      caret-color: #8a7355;
+      transition: border-color 0.4s;
+    }
+
+    .gufa-input::placeholder { color: #2e2718; letter-spacing: 0.25em; font-size: 20px; }
+    .gufa-input:focus { border-bottom-color: #8a7355; }
+
+    /* ── enter button ── */
+    .enter-btn {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: #0f0d0b;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.35;
+      transition: opacity 0.4s, transform 0.08s ease-out;
+      -webkit-tap-highlight-color: transparent;
+      transform: scale(1);
+    }
+
+    .enter-btn.ready { opacity: 1; }
+    .enter-btn.pressed { transform: scale(0.92); }
+
+    .enter-btn svg {
+      width: 32px;
+      height: 32px;
+      opacity: 0.45;
+      transition: opacity 0.3s;
+    }
+
+    .enter-btn.ready svg { opacity: 0.7; }
+
+    /* rim ring drawn as CSS box-shadow layers */
+    .enter-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow:
+        2px -2px 0 0.5px rgba(200,146,42,0.0),
+        inset 0 0 0 0.5px rgba(200,146,42,0.08);
+    }
+
+    .enter-btn::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 200deg,
+        transparent 0deg,
+        rgba(200,146,42,0.0) 40deg,
+        rgba(200,146,42,0.55) 110deg,
+        rgba(232,184,74,0.78) 145deg,
+        rgba(200,146,42,0.42) 185deg,
+        rgba(200,146,42,0.0) 230deg,
+        transparent 360deg
+      );
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.2px), white calc(100% - 1.2px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 1.2px), white calc(100% - 1.2px));
+    }
+
+    /* ground shadow */
+    .enter-btn-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .enter-btn-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 76px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.7) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── screens ── */
+    .loading-screen { display: none; flex-direction: column; align-items: center; gap: 1.4rem; }
+    .loading-screen.active { display: flex; }
+    .content-screen { display: flex; flex-direction: column; align-items: center; }
+    .content-screen.hidden { display: none; }
+
+    .film-frame {
+      width: 36px;
+      height: 52px;
+      border: 1px solid #4a3f2f;
+      position: relative;
+      animation: flicker 0.12s steps(1) infinite;
+    }
+
+    .film-frame::before, .film-frame::after {
+      content: '';
+      position: absolute;
+      left: -7px;
+      width: 6px;
+      background: #2a2018;
+      border-left: 1px solid #3a3020;
+      border-right: 1px solid #3a3020;
+    }
+
+    .film-frame::before { top: 4px; height: 8px; }
+    .film-frame::after { bottom: 4px; height: 8px; }
+
+    .film-inner {
+      position: absolute;
+      inset: 5px;
+      background: #1a1408;
+      animation: flicker-inner 0.18s steps(1) infinite;
+    }
+
+    @keyframes flicker { 0%, 100% { border-color: #4a3f2f; } 50% { border-color: #6b5a3e; } }
+    @keyframes flicker-inner {
+      0%, 80% { background: #1a1408; }
+      85% { background: #2a2010; }
+      90% { background: #0a0906; }
+      100% { background: #1a1408; }
+    }
+
+    .loading-hindi {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 17px;
+      color: #6b5a3e;
+      letter-spacing: 0.08em;
+      text-align: center;
+      animation: pulse-text 1.8s ease-in-out infinite;
+    }
+
+    .loading-english {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: #3d3222;
+      letter-spacing: 0.1em;
+      text-align: center;
+      animation: pulse-text 1.8s ease-in-out infinite;
+      animation-delay: 0.2s;
+    }
+
+    @keyframes pulse-text { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    .dots span { animation: blink 1.2s steps(1) infinite; color: #8a7355; }
+    .dots span:nth-child(2) { animation-delay: 0.4s; }
+    .dots span:nth-child(3) { animation-delay: 0.8s; }
+    @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div class="gufa-wrap">
+    <div class="grain"></div>
+    <div class="cave-glow"></div>
+
+    <div class="content-screen" id="contentScreen">
+      <div class="gufa-wordmark">gufa.Labs</div>
+      <div class="gufa-devanagari">यहाँ प्रकाश जन्म लेता है</div>
+      <div class="gufa-prompt">enter your number to step inside</div>
+      <div class="gufa-input-wrap">
+        <input class="gufa-input" id="phoneInput" type="tel" placeholder="· · · · · · · · · ·" maxlength="15" />
+        <div class="enter-btn-wrap">
+          <button class="enter-btn" id="enterBtn" aria-label="Enter">
+            <!-- 35mm film strip SVG icon -->
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="8" width="24" height="16" rx="1.5" stroke="#c8922a" stroke-width="1.2" fill="none"/>
+              <rect x="4" y="8" width="4" height="16" fill="#0a0908" stroke="#c8922a" stroke-width="0.8"/>
+              <rect x="24" y="8" width="4" height="16" fill="#0a0908" stroke="#c8922a" stroke-width="0.8"/>
+              <rect x="5" y="10" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="5" y="14" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="5" y="18" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="25" y="10" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="25" y="14" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="25" y="18" width="2" height="2.5" rx="0.4" fill="#c8922a" opacity="0.7"/>
+              <rect x="9" y="10" width="5.5" height="12" rx="0.6" stroke="#c8922a" stroke-width="0.8" fill="none" opacity="0.6"/>
+              <rect x="17" y="10" width="5.5" height="12" rx="0.6" stroke="#c8922a" stroke-width="0.8" fill="none" opacity="0.6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-screen" id="loadingScreen">
+      <div class="film-frame"><div class="film-inner"></div></div>
+      <div class="loading-hindi">गुफा जाग रही है<span class="dots"><span>.</span><span>.</span><span>.</span></span> आपका रास्ता ढूंढा जा रहा है<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+      <div class="loading-english">the cave is waking... your path is being found...</div>
+    </div>
+  </div>
+
+  <script>
+    const input     = document.getElementById('phoneInput');
+    const content   = document.getElementById('contentScreen');
+    const loading   = document.getElementById('loadingScreen');
+    const enterBtn  = document.getElementById('enterBtn');
+
+    // ── snum: strip leading +, prefix 91 if no country code ──
+    function buildSnum(raw) {
+      let n = raw.trim();
+      if (n.startsWith('+')) {
+        n = n.slice(1);
+      } else {
+        n = '91' + n;
+      }
+      return n;
+    }
+
+    function isReady() { return input.value.trim().length >= 10; }
+
+    function updateBtn() {
+      enterBtn.classList.toggle('ready', isReady());
+    }
+
+    // catch all input methods: typing, paste, autofill
+    input.addEventListener('input', updateBtn);
+    input.addEventListener('change', updateBtn);
+    input.addEventListener('keyup', updateBtn);
+
+    function proceed() {
+      if (!isReady()) return;
+      const snum = buildSnum(input.value);
+
+      // press animation
+      enterBtn.classList.add('pressed');
+      setTimeout(() => enterBtn.classList.remove('pressed'), 120);
+
+      setTimeout(() => {
+        content.classList.add('hidden');
+        loading.classList.add('active');
+      }, 80);
+
+      // 3.5 seconds of loading, then redirect
+      // !! HOSTING TODO !!
+      // For now all numbers route to the new-customer Tally form.
+      // Later: ApS checks Bigin here and routes returning vs new.
+      setTimeout(() => {
+        window.location.href = 'https://tally.so/r/dW16kz?snum=' + encodeURIComponent(snum);
+      }, 3580);
+    }
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') proceed();
+    });
+
+    enterBtn.addEventListener('click', proceed);
+
+    // mobile: touchstart for instant press feel
+    enterBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      proceed();
+    }, { passive: false });
+  </script>
+</body>
+</html>
