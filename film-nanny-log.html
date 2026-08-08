@@ -643,11 +643,20 @@
   function showFilmScreen() {
     const ordinals = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth'];
     const ordinal  = ordinals[(fiposn - 1)] || `#${fiposn}`;
-    const plural   = ficount > 1;
 
-    filmHeadline.textContent = plural
-      ? 'Which films are we feeding the cave today?'
-      : 'Which film are we feeding the cave today?';
+    const headlines = [
+      'Which film are we feeding the cave today?',
+      'And the second roll — what is it?',
+      'Third one — keep going.',
+      'The fourth film, what shall it be?',
+      'Almost there — the fifth roll?',
+      'Sixth — what are we developing?',
+      'The seventh roll, go on.',
+      'Eight films — what is the next one?',
+      'Last one — the ninth roll!',
+    ];
+
+    filmHeadline.textContent = headlines[fiposn - 1] || `Film ${fiposn} — what is it?`;
 
     filmSubline.textContent = ficount > 1
       ? `Roll ${fiposn} of ${ficount} — the ${ordinal} one.`
@@ -741,7 +750,11 @@
       items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (activeIndex >= 0 && currentItems[activeIndex]) selectFilm(currentItems[activeIndex]);
+      if (activeIndex >= 0 && currentItems[activeIndex]) {
+        selectFilm(currentItems[activeIndex]);
+      } else if (selectedFilm) {
+        continueBtn.click();
+      }
     } else if (e.key === 'Escape') {
       closeDropdown();
     }
@@ -754,11 +767,14 @@
   // ── CONTINUE ────────────────────────────────────────────────
   continueBtn.addEventListener('click', () => {
     if (!selectedFilm) return;
+    const mcartIn  = parseInt(urlParams.get('mcart') || '0', 10);
+    const newMcart = mcartIn + selectedFilm.price;
     const params = new URLSearchParams();
     params.set('sfilm',   selectedFilm.display);
     params.set('fipro',   selectedFilm.pro   || '');
     params.set('fisize',  selectedFilm.size  || '');
     params.set('1cart',   selectedFilm.price);
+    params.set('mcart',   newMcart);
     params.set('ficount', ficount);
     params.set('fiposn',  fiposn);
     if (snum)  params.set('snum',  snum);
