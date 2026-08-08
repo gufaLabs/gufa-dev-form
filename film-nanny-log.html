@@ -311,6 +311,8 @@
     .screen { display: none; flex-direction: column; align-items: center; width: 100%; }
     .screen.active { display: flex; }
   </style>
+  <link rel="dns-prefetch" href="//tally.so">
+  <link rel="preconnect" href="https://tally.so">
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.basic.min.js"></script>
 </head>
 <body>
@@ -743,7 +745,7 @@
       : `✦ ${film.display} — selected`;
     selectedBadge.classList.add('visible');
     continueBtn.classList.add('ready');
-    continueBtn.textContent = fiposn < ficount ? 'Next film →' : 'Done — review order';
+    continueBtn.textContent = fiposn < ficount ? 'Continue' : 'Done — review order';
   }
 
   const handleFilmInput = debounce(() => {
@@ -802,7 +804,9 @@
     if (snum)  params.set('snum',  snum);
     if (sname) params.set('sname', sname);
     if (gfid)  params.set('gfid',  gfid);
-    window.location.href = `${TALLY_URL}?${params.toString()}`;
+    const fullUrl = `${TALLY_URL}?${params.toString()}`;
+    // Use replace so navigation feels immediate and avoids an extra history entry
+    window.location.replace(fullUrl);
   });
 </script>
 </body>
