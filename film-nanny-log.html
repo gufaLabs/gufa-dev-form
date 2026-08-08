@@ -567,7 +567,7 @@
   // Fuse.js instance for fuzzy / tokenized searching
   const fuse = new Fuse(FILMS, {
     keys: ['display', 'search'],
-    threshold: 0.30,             // 0.0 = exact, 1.0 = very fuzzy
+    threshold: 0.28,             // 0.0 = exact, 1.0 = very fuzzy (tuned slightly less fuzzy)
     minMatchCharLength: 2,
     ignoreLocation: true,
     includeScore: true,
