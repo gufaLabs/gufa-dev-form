@@ -311,6 +311,7 @@
     .screen { display: none; flex-direction: column; align-items: center; width: 100%; }
     .screen.active { display: flex; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.basic.min.js"></script>
 </head>
 <body>
 
@@ -563,6 +564,15 @@
     };
   });
 
+  // Fuse.js instance for fuzzy / tokenized searching
+  const fuse = new Fuse(FILMS, {
+    keys: ['display', 'search'],
+    threshold: 0.30,             // 0.0 = exact, 1.0 = very fuzzy
+    minMatchCharLength: 2,
+    ignoreLocation: true,
+    includeScore: true,
+  });
+
   const FALLBACK = {
     display: 'not on the list?',
     search: 'not on the list',
@@ -687,11 +697,22 @@
     );
   }
 
+  // Debounce helper to limit how often expensive work runs as the user types
+  function debounce(fn, wait) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  }
+
   // ── TYPEAHEAD ────────────────────────────────────────────────
   function openDropdown(query) {
     const q = query.trim().toLowerCase();
     if (!q) { closeDropdown(); return; }
-    currentItems = [...FILMS.filter(f => f.search.includes(q)), FALLBACK];
+    // Use Fuse.js fuzzy/tokenized search for better matching of partial and typo'd queries
+    const results = fuse.search(q, { limit: 40 }).map(r => r.item);
+    currentItems = results.length ? results : [FALLBACK];
     dropdown.innerHTML = '';
     activeIndex = -1;
     currentItems.forEach((film, i) => {
@@ -725,12 +746,13 @@
     continueBtn.textContent = fiposn < ficount ? 'Next film →' : 'Done — review order';
   }
 
-  filmSearch.addEventListener('input', () => {
+  const handleFilmInput = debounce(() => {
     selectedFilm = null;
     selectedBadge.classList.remove('visible');
     continueBtn.classList.remove('ready');
     openDropdown(filmSearch.value);
-  });
+  }, 200);
+  filmSearch.addEventListener('input', handleFilmInput);
 
   filmSearch.addEventListener('focus', () => {
     if (filmSearch.value && !selectedFilm) openDropdown(filmSearch.value);
