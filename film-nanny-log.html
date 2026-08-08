@@ -27,10 +27,9 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'IM Fell English', Georgia, serif;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    /* ── grain overlay ── */
     body::before {
       content: '';
       position: fixed;
@@ -42,7 +41,6 @@
       z-index: 0;
     }
 
-    /* ── amber vignette ── */
     body::after {
       content: '';
       position: fixed;
@@ -55,15 +53,14 @@
     .stage {
       position: relative;
       z-index: 1;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 3rem 2rem 5rem;
     }
 
-    /* ── eyebrow ── */
     .eyebrow {
       font-family: 'IM Fell English', Georgia, serif;
       font-style: italic;
@@ -75,28 +72,89 @@
       opacity: 0.8;
     }
 
-    /* ── headline ── */
     .headline {
       font-family: 'IM Fell English', Georgia, serif;
       font-style: italic;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
       color: var(--text);
       text-align: center;
       line-height: 1.3;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       letter-spacing: 0.01em;
+      transition: opacity 0.3s;
     }
 
     .subline {
       font-family: 'IM Fell English', Georgia, serif;
       font-style: italic;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--text-dim);
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2.4rem;
     }
 
-    /* ── search container ── */
+    /* ── film count ── */
+    .count-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .count-input {
+      width: 80px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.7rem 1rem;
+      color: var(--text);
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic;
+      font-size: 1.6rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      outline: none;
+      caret-color: var(--amber);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    .count-input::-webkit-outer-spin-button,
+    .count-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .count-input:focus {
+      border-color: var(--amber-dim);
+      box-shadow: 0 0 0 3px var(--amber-glow);
+    }
+
+    .count-nudge {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--amber-dim);
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.6;
+      opacity: 0;
+      transition: opacity 0.4s;
+      min-height: 1rem;
+    }
+
+    .count-nudge.visible { opacity: 1; }
+
+    /* ── film position indicator ── */
+    .film-pos {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      color: var(--amber-dim);
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    /* ── search ── */
     .search-wrap {
       position: relative;
       width: 100%;
@@ -138,7 +196,7 @@
       background: #16130f;
       border: 1px solid var(--border);
       border-radius: 2px;
-      max-height: 280px;
+      max-height: 260px;
       overflow-y: auto;
       z-index: 100;
       display: none;
@@ -157,9 +215,6 @@
       color: var(--text-dim);
       border-bottom: 1px solid #1e1a16;
       transition: background 0.12s, color 0.12s;
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
     }
 
     .dropdown-item:last-child { border-bottom: none; }
@@ -170,30 +225,14 @@
       color: var(--text);
     }
 
-    /* gufa & Film Dealer items get amber accent */
-    .dropdown-item.gufa-item {
-      color: var(--amber-dim);
-    }
+    .dropdown-item.gufa-item { color: var(--amber-dim); }
     .dropdown-item.gufa-item:hover,
     .dropdown-item.gufa-item.active {
       color: var(--amber);
       background: #1e1a10;
     }
 
-    .film-name { flex: 1; }
-
-    .match-highlight {
-      color: var(--amber);
-      font-style: italic;
-    }
-
-    .no-results {
-      padding: 0.85rem 1.2rem;
-      font-family: 'IM Fell English', Georgia, serif;
-      font-style: italic;
-      font-size: 0.88rem;
-      color: var(--text-dim);
-    }
+    .match-highlight { color: var(--amber); font-style: italic; }
 
     .dropdown-item.fallback-item {
       border-top: 1px solid #2a2420;
@@ -218,15 +257,13 @@
       color: var(--amber-dim);
       text-align: center;
       min-height: 1.4rem;
-      transition: opacity 0.2s;
       opacity: 0;
+      transition: opacity 0.2s;
     }
 
-    .selected-badge.visible {
-      opacity: 1;
-    }
+    .selected-badge.visible { opacity: 1; }
 
-    /* ── continue button ── */
+    /* ── continue ── */
     .continue-btn {
       margin-top: 2.4rem;
       padding: 0.85rem 2.8rem;
@@ -255,7 +292,7 @@
       color: #e8c870;
     }
 
-    /* ── footer mark ── */
+    /* ── footer ── */
     .mark {
       position: fixed;
       bottom: 1.8rem;
@@ -269,6 +306,10 @@
       opacity: 0.35;
       white-space: nowrap;
     }
+
+    /* ── count screen vs typeahead screen ── */
+    .screen { display: none; flex-direction: column; align-items: center; width: 100%; }
+    .screen.active { display: flex; }
   </style>
 </head>
 <body>
@@ -276,271 +317,352 @@
 <div class="stage">
   <p class="eyebrow">gufa.Labs · devScan</p>
 
-  <h1 class="headline">Which film are you bringing in?</h1>
-  <p class="subline">Start typing — the name, the make, anything.</p>
-
-  <div class="search-wrap">
-    <input
-      class="search-input"
-      type="text"
-      id="filmSearch"
-      placeholder="e.g. Kodak Gold, HP5, Cinestill..."
-      autocomplete="off"
-      spellcheck="false"
-    />
-    <div class="dropdown" id="dropdown"></div>
+  <!-- SCREEN A: film count (shown only when ficount not in URL) -->
+  <div class="screen" id="screenCount">
+    <h1 class="headline">How many rolls today?</h1>
+    <p class="subline">Enter a number between 1 and 9.</p>
+    <div class="count-wrap">
+      <input class="count-input" type="number" id="filmCountInput" min="1" max="9" placeholder="–" autocomplete="off" />
+      <div class="count-nudge" id="countNudge">
+        Big haul! For orders above 6, we'd suggest splitting by film type —
+        one form for colour, one for black &amp; white. It keeps everything cleaner for both of us.
+      </div>
+    </div>
+    <button class="continue-btn" id="countConfirmBtn">Let's pick the films</button>
   </div>
 
-  <div class="selected-badge" id="selectedBadge"></div>
-
-  <button class="continue-btn" id="continueBtn">
-    Continue with this film
-  </button>
+  <!-- SCREEN B: single typeahead (shown when ficount known) -->
+  <div class="screen" id="screenFilm">
+    <h1 class="headline" id="filmHeadline"></h1>
+    <p class="subline" id="filmSubline"></p>
+    <p class="film-pos" id="filmPos"></p>
+    <div class="search-wrap">
+      <input class="search-input" type="text" id="filmSearch" autocomplete="off" spellcheck="false" />
+      <div class="dropdown" id="dropdown"></div>
+    </div>
+    <div class="selected-badge" id="selectedBadge"></div>
+    <button class="continue-btn" id="continueBtn">Continue</button>
+  </div>
 </div>
 
 <p class="mark">gufa.Labs · यहाँ प्रकाश जन्म लेता है</p>
 
 <script>
-  // ── FILM LIST ──────────────────────────────────────────────────
-  // format: { display, searchTokens, isGufa }
-  // display = what's shown in dropdown and passed forward
-  // isGufa  = amber treatment
+  // ── FILM DATABASE ─────────────────────────────────────────────
+  // pro:  'BNW' | 'C41' | 'ECN2' | 'E6'
+  // size: '35mm' | '120' | '' (both)
+  // price: number in ₹ (0 for Essence)
 
-  const FILMS = [
-    // KODAK
-    { m: 'Kodak',        f: 'Gold 100' },
-    { m: 'Kodak',        f: 'Gold 200' },
-    { m: 'Kodak',        f: 'ColorPlus 200' },
-    { m: 'Kodak',        f: 'Kodacolor VR-G 200' },
-    { m: 'Kodak',        f: 'Pro Image 100' },
-    { m: 'Kodak',        f: 'Ultramax 400' },
-    { m: 'Kodak',        f: 'Portra 160' },
-    { m: 'Kodak',        f: 'Portra 400' },
-    { m: 'Kodak',        f: 'Portra 800' },
-    { m: 'Kodak',        f: 'Ektar 100' },
-    { m: 'Kodak',        f: 'Ektachrome 100D' },
-    { m: 'Kodak',        f: 'T-MAX 100' },
-    { m: 'Kodak',        f: 'T-MAX 400' },
-    { m: 'Kodak',        f: 'T-MAX P3200' },
-    { m: 'Kodak',        f: 'Tri-X 400' },
-    { m: 'Kodak',        f: 'DOUBLE-X 250' },
-    { m: 'Kodak',        f: 'Eastman Double-X 250' },
-    { m: 'Kodak',        f: 'Vision3 50D' },
-    { m: 'Kodak Vision3',f: '200T' },
-    { m: 'Kodak Vision3',f: '250D' },
-    { m: 'Kodak Vision3',f: '500T' },
-    // FUJIFILM
-    { m: 'Fujifilm',     f: 'Fujicolor 100' },
-    { m: 'Fujifilm',     f: 'Fujicolor 200' },
-    { m: 'Fujifilm',     f: 'Fujicolor 400' },
-    { m: 'Fujifilm',     f: 'Pro 400H' },
-    { m: 'Fujifilm',     f: 'ProPlus 100' },
-    { m: 'Fujifilm',     f: 'Superia 400' },
-    { m: 'Fujifilm',     f: 'NPC 160' },
-    { m: 'Fujifilm',     f: 'Industrial 100' },
-    { m: 'Fujifilm',     f: 'Natura 1600H' },
-    { m: 'Fujifilm',     f: 'Neopan 100 Acros II' },
-    { m: 'Fujifilm',     f: 'Neopan 400' },
-    { m: 'Fujifilm',     f: 'Neopan 1600' },
-    // ILFORD
-    { m: 'Ilford',       f: 'PAN F+ 50' },
-    { m: 'Ilford',       f: 'FP4+ 125' },
-    { m: 'Ilford',       f: 'HP5+ 400' },
-    { m: 'Ilford',       f: 'XP2 Super 400' },
-    { m: 'Ilford',       f: 'Delta 100' },
-    { m: 'Ilford',       f: 'Delta 400' },
-    { m: 'Ilford',       f: 'Delta 3200' },
-    { m: 'Ilford',       f: 'SFX 200' },
-    { m: 'Ilford',       f: 'Ortho+ 80' },
+  const FILMS_RAW = [
+    // KODAK COLOR
+    { m:'Kodak', f:'Gold 100',            pro:'C41',  size:'35mm', price:900 },
+    { m:'Kodak', f:'Gold 200',            pro:'C41',  size:'',     price:900 },
+    { m:'Kodak', f:'ColorPlus 200',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Kodak', f:'Kodacolor VR-G 200',  pro:'C41',  size:'35mm', price:900 },
+    { m:'Kodak', f:'Pro Image 100',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Kodak', f:'Ultramax 400',        pro:'C41',  size:'',     price:900 },
+    { m:'Kodak', f:'Portra 160',          pro:'C41',  size:'',     price:900 },
+    { m:'Kodak', f:'Portra 400',          pro:'C41',  size:'',     price:900 },
+    { m:'Kodak', f:'Portra 800',          pro:'C41',  size:'',     price:900 },
+    { m:'Kodak', f:'Ektar 100',           pro:'C41',  size:'',     price:900 },
+    // KODAK BNW
+    { m:'Kodak', f:'T-MAX 100',           pro:'BNW',  size:'',     price:600 },
+    { m:'Kodak', f:'T-MAX 400',           pro:'BNW',  size:'',     price:600 },
+    { m:'Kodak', f:'T-MAX P3200',         pro:'BNW',  size:'35mm', price:600 },
+    { m:'Kodak', f:'Tri-X 400',           pro:'BNW',  size:'',     price:600 },
+    { m:'Kodak', f:'DOUBLE-X 250',        pro:'BNW',  size:'35mm', price:600 },
+    { m:'Kodak', f:'Eastman Double-X 250',pro:'BNW',  size:'35mm', price:600 },
+    // KODAK SLIDE
+    { m:'Kodak', f:'Ektachrome 100D',     pro:'E6',   size:'',     price:1200 },
+    // KODAK VISION3 (ECN-2)
+    { m:'Kodak Vision3', f:'50D',         pro:'ECN2', size:'35mm', price:900 },
+    { m:'Kodak Vision3', f:'200T',        pro:'ECN2', size:'35mm', price:900 },
+    { m:'Kodak Vision3', f:'250D',        pro:'ECN2', size:'',     price:900 },
+    { m:'Kodak Vision3', f:'500T',        pro:'ECN2', size:'',     price:900 },
+    // FUJIFILM COLOR
+    { m:'Fujifilm', f:'Fujicolor 100',    pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Fujicolor 200',    pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Fujicolor 400',    pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Pro 400H',         pro:'C41',  size:'',     price:900 },
+    { m:'Fujifilm', f:'ProPlus 100',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Superia 400',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'NPC 160',          pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Industrial 100',   pro:'C41',  size:'35mm', price:900 },
+    { m:'Fujifilm', f:'Natura 1600H',     pro:'C41',  size:'35mm', price:900 },
+    // FUJIFILM SLIDE
+    { m:'Fujifilm', f:'Provia 100F',      pro:'E6',   size:'',     price:1200 },
+    { m:'Fujifilm', f:'Velvia 50',        pro:'E6',   size:'',     price:1200 },
+    { m:'Fujifilm', f:'Velvia 100',       pro:'E6',   size:'',     price:1200 },
+    // FUJIFILM BNW
+    { m:'Fujifilm', f:'Neopan 100 Acros II', pro:'BNW', size:'35mm', price:600 },
+    { m:'Fujifilm', f:'Neopan 400',       pro:'BNW',  size:'35mm', price:600 },
+    { m:'Fujifilm', f:'Neopan 1600',      pro:'BNW',  size:'35mm', price:600 },
+    // ILFORD BNW
+    { m:'Ilford', f:'PAN F+ 50',          pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'FP4+ 125',           pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'HP5+ 400',           pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'Delta 100',          pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'Delta 400',          pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'Delta 3200',         pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'SFX 200',            pro:'BNW',  size:'',     price:600 },
+    { m:'Ilford', f:'Ortho+ 80',          pro:'BNW',  size:'',     price:600 },
+    // XP2 — BNW film, C41 process
+    { m:'Ilford', f:'XP2 Super 400',      pro:'C41',  size:'',     price:900 },
     // HARMAN
-    { m: 'Harman',       f: 'Phoenix 200' },
-    { m: 'Harman',       f: 'Phoenix II 200' },
-    { m: 'Harman',       f: 'Switch Azure' },
-    { m: 'Harman',       f: 'Ilfocolor 400' },
-    { m: 'Harman',       f: 'Ilfocolor Rapid Retro 400' },
-    { m: 'Harman',       f: 'RED 125' },
-    // CINESTILL
-    { m: 'CineStill',    f: '50D' },
-    { m: 'CineStill',    f: '400D' },
-    { m: 'CineStill',    f: '800T' },
-    // LOMOGRAPHY
-    { m: 'Lomography',   f: 'CN 100' },
-    { m: 'Lomography',   f: 'CN 400' },
-    { m: 'Lomography',   f: 'CN 800' },
-    { m: 'LomoChrome',   f: 'Purple 100-400' },
-    { m: 'LomoChrome',   f: 'Turquoise 100-400' },
-    { m: 'LomoChrome',   f: 'Metropolis 100-400' },
-    { m: 'LomoChrome',   f: "Color '92 400" },
-    { m: 'Lomography',   f: 'Redscale XR 50-200' },
-    { m: 'Lomography',   f: 'Lady Grey 400' },
-    { m: 'Lomography',   f: 'Berlin Kino 400' },
-    { m: 'Lomography',   f: 'Potsdam Kino 100' },
-    { m: 'Lomography',   f: 'Fantôme Kino 8' },
-    { m: 'Lomography',   f: 'Babylon Kino 13' },
+    { m:'Harman', f:'Phoenix 200',        pro:'C41',  size:'',     price:900 },
+    { m:'Harman', f:'Phoenix II 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Harman', f:'Switch Azure',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Harman', f:'Ilfocolor 400',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Harman', f:'Ilfocolor Rapid Retro 400', pro:'C41', size:'35mm', price:900 },
+    { m:'Harman', f:'RED 125',            pro:'BNW',  size:'35mm', price:600 },
+    // CINESTILL (ECN-2)
+    { m:'CineStill', f:'50D',             pro:'ECN2', size:'',     price:900 },
+    { m:'CineStill', f:'400D',            pro:'ECN2', size:'',     price:900 },
+    { m:'CineStill', f:'800T',            pro:'ECN2', size:'',     price:900 },
+    // LOMOGRAPHY COLOR
+    { m:'Lomography', f:'CN 100',         pro:'C41',  size:'35mm', price:900 },
+    { m:'Lomography', f:'CN 400',         pro:'C41',  size:'',     price:900 },
+    { m:'Lomography', f:'CN 800',         pro:'C41',  size:'',     price:900 },
+    { m:'LomoChrome', f:'Purple 100-400', pro:'C41',  size:'',     price:900 },
+    { m:'LomoChrome', f:'Turquoise 100-400', pro:'C41', size:'',   price:900 },
+    { m:'LomoChrome', f:'Metropolis 100-400', pro:'C41', size:'',  price:900 },
+    { m:'LomoChrome', f:"Color '92 400",  pro:'C41',  size:'35mm', price:900 },
+    { m:'Lomography', f:'Redscale XR 50-200', pro:'C41', size:'35mm', price:900 },
+    { m:'Lomography', f:'Earl Grey 100',  pro:'BNW',  size:'120',  price:600 },
+    { m:'Lomography', f:'Lady Grey 400',  pro:'BNW',  size:'',     price:600 },
+    { m:'Lomography', f:'Berlin Kino 400',pro:'BNW',  size:'',     price:600 },
+    { m:'Lomography', f:'Potsdam Kino 100', pro:'BNW', size:'',    price:600 },
+    { m:'Lomography', f:'Fantôme Kino 8', pro:'BNW',  size:'35mm', price:600 },
+    { m:'Lomography', f:'Babylon Kino 13',pro:'BNW',  size:'35mm', price:600 },
     // FOMA
-    { m: 'Foma Bohemia', f: 'Classic 100' },
-    { m: 'Foma Bohemia', f: 'Creative 200' },
-    { m: 'Foma Bohemia', f: 'Action 400' },
-    { m: 'Fomapan',      f: 'Retropan 320 Soft' },
-    { m: 'Fomapan',      f: 'R100 Reversal' },
+    { m:'Foma Bohemia', f:'Classic 100',  pro:'BNW',  size:'35mm', price:600 },
+    { m:'Foma Bohemia', f:'Creative 200', pro:'BNW',  size:'35mm', price:600 },
+    { m:'Foma Bohemia', f:'Action 400',   pro:'BNW',  size:'35mm', price:600 },
+    { m:'Fomapan', f:'Retropan 320 Soft', pro:'BNW',  size:'',     price:600 },
+    { m:'Fomapan', f:'R100 Reversal',     pro:'E6',   size:'35mm', price:1200 },
     // ADOX
-    { m: 'Adox',         f: 'CMS 20 II' },
-    { m: 'Adox',         f: 'CHS 100' },
-    { m: 'Adox',         f: 'HR-50' },
-    { m: 'Adox',         f: 'Scala 50' },
-    { m: 'Adox',         f: 'Scala 160' },
-    { m: 'Adox',         f: 'Silvermax 100' },
+    { m:'Adox', f:'CMS 20 II',            pro:'BNW',  size:'',     price:600 },
+    { m:'Adox', f:'CHS 100',              pro:'BNW',  size:'',     price:600 },
+    { m:'Adox', f:'HR-50',                pro:'BNW',  size:'35mm', price:600 },
+    { m:'Adox', f:'Scala 50',             pro:'BNW',  size:'35mm', price:600 },
+    { m:'Adox', f:'Scala 160',            pro:'BNW',  size:'35mm', price:600 },
+    { m:'Adox', f:'Silvermax 100',        pro:'BNW',  size:'',     price:600 },
     // ORWO
-    { m: 'ORWO',         f: 'NC400' },
-    { m: 'ORWO',         f: 'NC500' },
-    { m: 'ORWO',         f: 'UN54 100' },
-    { m: 'ORWO',         f: 'NP 100' },
-    { m: 'ORWO',         f: 'NP75 400' },
+    { m:'ORWO', f:'NC400',                pro:'C41',  size:'35mm', price:900 },
+    { m:'ORWO', f:'NC500',                pro:'C41',  size:'35mm', price:900 },
+    { m:'ORWO', f:'UN54 100',             pro:'BNW',  size:'35mm', price:600 },
+    { m:'ORWO', f:'NP 100',               pro:'BNW',  size:'35mm', price:600 },
+    { m:'ORWO', f:'NP75 400',             pro:'BNW',  size:'35mm', price:600 },
     // KENTMERE
-    { m: 'Kentmere',     f: 'PAN 100' },
-    { m: 'Kentmere',     f: 'PAN 200' },
-    { m: 'Kentmere',     f: 'PAN 400' },
-    // OTHERS
-    { m: 'Bergger',      f: 'Pancro 400' },
-    { m: 'Ferrania',     f: 'P30 80' },
-    { m: 'Ferrania',     f: 'Orto 50' },
-    { m: 'Ferrania',     f: 'P33 160' },
-    // REVOLOG
-    { m: 'Revolog',      f: 'Aurora 400' },
-    { m: 'Revolog',      f: 'Aurora 800' },
-    { m: 'Revolog',      f: 'Elektra 100' },
-    { m: 'Revolog',      f: 'Psychedelic 400' },
-    { m: 'Revolog',      f: 'Street Savvy 400' },
-    { m: 'Revolog',      f: 'Apollo 18 400' },
-    { m: 'Revolog',      f: 'Apollo Moonstruck 200' },
-    { m: 'Revolog',      f: 'Bubblegum 200' },
-    { m: 'Revolog',      f: 'Jelly 200' },
-    { m: 'Revolog',      f: 'Pacific 400' },
-    { m: 'Revolog',      f: 'Stereo 200' },
-    // DUBBLEFILM
-    { m: 'Dubblefilm',   f: 'Daily Color 400' },
-    { m: 'Dubblefilm',   f: 'Solar 400' },
-    { m: 'Dubblefilm',   f: 'Treat 400' },
-    { m: 'Dubblefilm',   f: 'Cinema 800' },
-    { m: 'Dubblefilm',   f: '460nm' },
-    { m: 'Dubblefilm',   f: '600nm' },
-    { m: 'Dubblefilm',   f: 'Echo 200' },
-    { m: 'Dubblefilm',   f: 'Kolor 200' },
-    { m: 'Dubblefilm',   f: 'Kosmos 200' },
-    { m: 'Dubblefilm',   f: 'Laser 200' },
-    { m: 'Dubblefilm',   f: 'Nebula 200' },
-    { m: 'Dubblefilm',   f: 'Plexus 200' },
-    { m: 'Dubblefilm',   f: 'Rasp 200' },
-    { m: 'Dubblefilm',   f: 'Streak 200' },
-    { m: 'Dubblefilm',   f: 'Tesla I 200' },
-    { m: 'Dubblefilm',   f: 'Tesla II 200' },
-    { m: 'Dubblefilm',   f: 'Texture 200' },
-    { m: 'Dubblefilm',   f: 'Volvox 200' },
-    { m: 'Dubblefilm',   f: 'SHOW 400' },
+    { m:'Kentmere', f:'PAN 100',          pro:'BNW',  size:'',     price:600 },
+    { m:'Kentmere', f:'PAN 200',          pro:'BNW',  size:'35mm', price:600 },
+    { m:'Kentmere', f:'PAN 400',          pro:'BNW',  size:'',     price:600 },
+    // BERGGER
+    { m:'Bergger', f:'Pancro 400',        pro:'BNW',  size:'',     price:600 },
+    // FERRANIA
+    { m:'Ferrania', f:'P30 80',           pro:'BNW',  size:'35mm', price:600 },
+    { m:'Ferrania', f:'Orto 50',          pro:'BNW',  size:'35mm', price:600 },
+    { m:'Ferrania', f:'P33 160',          pro:'BNW',  size:'35mm', price:600 },
+    // REVOLOG (all C41)
+    { m:'Revolog', f:'Aurora 400',        pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Aurora 800',        pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Elektra 100',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Psychedelic 400',   pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Street Savvy 400',  pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Apollo 18 400',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Apollo Moonstruck 200', pro:'C41', size:'35mm', price:900 },
+    { m:'Revolog', f:'Bubblegum 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Jelly 200',         pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Pacific 400',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Revolog', f:'Stereo 200',        pro:'C41',  size:'35mm', price:900 },
+    // DUBBLEFILM (all C41)
+    { m:'Dubblefilm', f:'Daily Color 400',pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Solar 400',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Treat 400',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Cinema 800',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'460nm',          pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'600nm',          pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Echo 200',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Kolor 200',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Kosmos 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Laser 200',      pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Nebula 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Plexus 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Rasp 200',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Streak 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Tesla I 200',    pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Tesla II 200',   pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Texture 200',    pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'Volvox 200',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Dubblefilm', f:'SHOW 400',       pro:'C41',  size:'35mm', price:900 },
     // FLIC FILM
-    { m: 'Flic Film',    f: 'Elektra 100' },
-    { m: 'Flic Film',    f: 'BW-XX' },
+    { m:'Flic Film', f:'Elektra 100',     pro:'C41',  size:'35mm', price:900 },
+    { m:'Flic Film', f:'BW-XX',           pro:'BNW',  size:'35mm', price:600 },
     // SVEMA
-    { m: 'Svema',        f: 'FN-64' },
-    { m: 'Svema',        f: 'Foto 100' },
-    { m: 'Svema',        f: 'Foto 200' },
-    { m: 'Svema',        f: 'Foto 400' },
-    { m: 'Svema',        f: 'NK-2Sh 100' },
-    { m: 'Svema',        f: 'A-2Sh 400' },
-    { m: 'Svema',        f: 'MZ-3' },
+    { m:'Svema', f:'FN-64',               pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'Foto 100',            pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'Foto 200',            pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'Foto 400',            pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'NK-2Sh 100',          pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'A-2Sh 400',           pro:'BNW',  size:'35mm', price:600 },
+    { m:'Svema', f:'MZ-3',                pro:'BNW',  size:'35mm', price:600 },
     // LAZY
-    { m: 'Lazy',         f: '250' },
-    { m: 'Lazy',         f: '500' },
-    { m: 'Lazy',         f: 'Monochrome' },
-    { m: 'Lazy',         f: 'E100' },
+    { m:'Lazy', f:'250',                  pro:'C41',  size:'35mm', price:900 },
+    { m:'Lazy', f:'500',                  pro:'C41',  size:'35mm', price:900 },
+    { m:'Lazy', f:'Monochrome',           pro:'BNW',  size:'35mm', price:600 },
+    { m:'Lazy', f:'E100',                 pro:'E6',   size:'35mm', price:1200 },
     // ZHENWEI
-    { m: 'Zhenwei',      f: 'Kepler 100' },
-    { m: 'Zhenwei',      f: 'Kepler 400' },
-    { m: 'Zhenwei',      f: 'Kepler 800' },
-    { m: 'Zhenwei',      f: 'You-Name-It' },
-    { m: 'Zhenwei',      f: 'Sincity 1000' },
-    // DISPOSABLES
-    { m: 'Disposable Kodak',    f: 'FunSaver 800' },
-    { m: 'Disposable Fujifilm', f: 'QuickSnap 400' },
-    { m: 'Disposable Fujifilm', f: 'QuickSnap Waterproof 800' },
-    { m: 'Disposable Ilford',   f: 'HP5+ Single Use' },
-    { m: 'Disposable Ilford',   f: 'XP2 Super Single Use' },
-    { m: 'Disposable Harman',   f: 'Reusable' },
-    { m: 'Disposable Lomography',f: 'Simple Use 400' },
-    { m: 'Disposable Lomography',f: 'Simple Use B&W' },
-    { m: 'Disposable Dubblefilm',f: 'SHOW 400' },
-    { m: 'Disposable AGFAPhoto', f: 'LeBox Color 400' },
-    { m: 'Disposable AGFAPhoto', f: 'LeBox B&W' },
-    // gufa ─ amber treatment, display name is the full thing as-is
-    { m: 'gufa',         f: 'Essence 250',          gufa: true },
-    { m: 'gufa',         f: "Roasty Toasty 400",    gufa: true },
-    { m: 'gufa',         f: 'Cine Color 250',        gufa: true },
-    { m: 'gufa',         f: 'Cine Color 500',        gufa: true },
-    { m: 'gufa',         f: 'Cine Color 500T',       gufa: true },
-    { m: 'gufa',         f: 'Cine Color 1000',       gufa: true },
-    { m: 'gufa',         f: 'Where is my Mind',      gufa: true },
-    { m: 'gufa',         f: 'White Snow 125',        gufa: true },
-    { m: 'gufa',         f: 'Sol.64',                gufa: true },
-    { m: 'gufa',         f: 'Jadu Tona 200',         gufa: true },
-    { m: 'gufa',         f: 'Jadu Tona 400',         gufa: true },
-    { m: 'gufa',         f: 'Chandrama 2500',        gufa: true },
-    // Film Dealer ─ same amber treatment
-    { m: 'Film Dealer',  f: 'Party Wolf',            gufa: true },
-  ].map(entry => {
-    const isGufa = entry.gufa === true;
-    const isGufaOwn = entry.m === 'gufa';
-    const isFilmDealer = entry.m === 'Film Dealer';
+    { m:'Zhenwei', f:'Kepler 100',        pro:'C41',  size:'35mm', price:900 },
+    { m:'Zhenwei', f:'Kepler 400',        pro:'C41',  size:'35mm', price:900 },
+    { m:'Zhenwei', f:'Kepler 800',        pro:'C41',  size:'35mm', price:900 },
+    { m:'Zhenwei', f:'You-Name-It',       pro:'C41',  size:'35mm', price:900 },
+    { m:'Zhenwei', f:'Sincity 1000',      pro:'C41',  size:'35mm', price:900 },
+    // DISPOSABLES (all C41, all 35mm)
+    { m:'Disposable Kodak',     f:'FunSaver 800',            pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Fujifilm',  f:'QuickSnap 400',           pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Fujifilm',  f:'QuickSnap Waterproof 800',pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Ilford',    f:'HP5+ Single Use',         pro:'BNW', size:'35mm', price:600 },
+    { m:'Disposable Ilford',    f:'XP2 Super Single Use',    pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Harman',    f:'Reusable',                pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Lomography',f:'Simple Use 400',          pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable Lomography',f:'Simple Use B&W',          pro:'BNW', size:'35mm', price:600 },
+    { m:'Disposable Dubblefilm',f:'SHOW 400',                pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable AGFAPhoto', f:'LeBox Color 400',         pro:'C41', size:'35mm', price:900 },
+    { m:'Disposable AGFAPhoto', f:'LeBox B&W',               pro:'BNW', size:'35mm', price:600 },
+    // gufa FILMS (amber, Essence is free)
+    { m:'gufa', f:'Essence 250',       pro:'C41', size:'35mm', price:0,    gufa:true },
+    { m:'gufa', f:'Roasty Toasty 400', pro:'C41', size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Cine Color 250',    pro:'ECN2',size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Cine Color 500',    pro:'ECN2',size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Cine Color 500T',   pro:'ECN2',size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Cine Color 1000',   pro:'ECN2',size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Where is my Mind',  pro:'BNW', size:'35mm', price:600,  gufa:true },
+    { m:'gufa', f:'White Snow 125',    pro:'BNW', size:'35mm', price:600,  gufa:true },
+    { m:'gufa', f:'Sol.64',            pro:'BNW', size:'35mm', price:600,  gufa:true },
+    { m:'gufa', f:'Jadu Tona 200',     pro:'C41', size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Jadu Tona 400',     pro:'C41', size:'35mm', price:900,  gufa:true },
+    { m:'gufa', f:'Chandrama 2500',    pro:'BNW', size:'35mm', price:600,  gufa:true },
+    // FILM DEALER (amber)
+    { m:'Film Dealer', f:'Party Wolf',  pro:'C41', size:'35mm', price:900,  gufa:true },
+  ];
 
+  // Build FILMS array with display name + search string
+  const FILMS = FILMS_RAW.map(e => {
+    const isGufa = e.gufa === true;
     let display;
-    if (isGufaOwn) {
-      display = `gufa's ${entry.f}`;
-    } else if (isFilmDealer) {
-      display = `${entry.f} (Film Dealer)`;
-    } else {
-      display = `${entry.f} (${entry.m})`;
-    }
-
+    if (e.m === 'gufa')        display = `gufa's ${e.f}`;
+    else if (e.m === 'Film Dealer') display = `${e.f} (Film Dealer)`;
+    else                       display = `${e.f} (${e.m})`;
     return {
       display,
-      search: `${entry.m} ${entry.f}`.toLowerCase(),
+      search: `${e.m} ${e.f}`.toLowerCase(),
       isGufa,
+      pro:   e.pro,
+      size:  e.size,
+      price: e.price,
     };
   });
 
-  // ── special fallback entry — always appended at end of results ──
   const FALLBACK = {
     display: 'not on the list?',
     search: 'not on the list',
     isGufa: false,
     isFallback: true,
+    pro: '', size: '', price: 0,
   };
 
+  // ── PLACEHOLDER POOL ─────────────────────────────────────────
+  const PLACEHOLDERS = [
+    'e.g. Kodak Gold, Disposable, Fuji...',
+    'e.g. Essence 250, HP5+, Delta 100...',
+    'e.g. Lazy 250, Kepler 800, Chandrama 2500...',
+    'e.g. Revolog Aurora, FlicFilm, Orwo...',
+    'e.g. Ilford XP2, PAN 400, Where is my mind...',
+    'e.g. Ferrania, Adox, Bergger...',
+    'e.g. Lomography Turquoise, Lady Grey 400...',
+    'e.g. Phoenix, SFX, Superia...',
+    'e.g. Ferrania, Adox, Bergger...',
+  ];
+
+  const randomPlaceholder = PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
+
+  // ── URL PARAMS ───────────────────────────────────────────────
+  const urlParams = new URLSearchParams(window.location.search);
+  const snum      = urlParams.get('snum')    || '';
+  const sname     = urlParams.get('sname')   || '';
+  const gfid      = urlParams.get('gfid')    || '';
+  let   ficount   = parseInt(urlParams.get('ficount') || '0', 10);
+  let   fiposn    = parseInt(urlParams.get('fiposn')  || '1', 10);
+
+  const TALLY_URL = 'https://tally.so/r/rjWNDv';
+
   // ── DOM ──────────────────────────────────────────────────────
-  const input       = document.getElementById('filmSearch');
-  const dropdown    = document.getElementById('dropdown');
-  const badge       = document.getElementById('selectedBadge');
-  const continueBtn = document.getElementById('continueBtn');
+  const screenCount     = document.getElementById('screenCount');
+  const screenFilm      = document.getElementById('screenFilm');
+  const filmCountInput  = document.getElementById('filmCountInput');
+  const countNudge      = document.getElementById('countNudge');
+  const countConfirmBtn = document.getElementById('countConfirmBtn');
+  const filmHeadline    = document.getElementById('filmHeadline');
+  const filmSubline     = document.getElementById('filmSubline');
+  const filmPos         = document.getElementById('filmPos');
+  const filmSearch      = document.getElementById('filmSearch');
+  const dropdown        = document.getElementById('dropdown');
+  const selectedBadge   = document.getElementById('selectedBadge');
+  const continueBtn     = document.getElementById('continueBtn');
 
   let selectedFilm  = null;
   let activeIndex   = -1;
   let currentItems  = [];
 
-  const TALLY_URL = 'https://tally.so/r/rjWNDv';
+  // ── DECIDE WHICH SCREEN ──────────────────────────────────────
+  if (ficount >= 1) {
+    showFilmScreen();
+  } else {
+    screenCount.classList.add('active');
+  }
 
-  // ─────────────────────────────────────────────────────────────
-  // !! HOSTING TODO !!
-  // When live, update @wayahead in Tally devScan form to:
-  //   https://gufalabs.github.io/gufa-dev-form/film-nanny-log.html
-  // The redirect on completion line stays: @wayahead?order value=@mcart
-  // Also ensure Tally passes snum: @wayahead?order value=@mcart&snum=@snum
-  // ─────────────────────────────────────────────────────────────
+  // ── COUNT SCREEN LOGIC ───────────────────────────────────────
+  filmCountInput.addEventListener('input', () => {
+    let val = parseInt(filmCountInput.value, 10);
+    if (isNaN(val) || val < 1) val = 0;
+    if (val > 9) { val = 9; filmCountInput.value = 9; }
+    countNudge.classList.toggle('visible', val >= 7);
+    countConfirmBtn.classList.toggle('ready', val >= 1);
+  });
 
-  // Read incoming params from URL
-  const urlParams    = new URLSearchParams(window.location.search);
-  const orderValue   = urlParams.get('order value'); // e.g. "1500" — present on Film 2, 3, 4...
-  const snum         = urlParams.get('snum')  || ''; // phone number — carried throughout
-  const sname        = urlParams.get('sname') || ''; // customer name — carried throughout
+  countConfirmBtn.addEventListener('click', () => {
+    const val = parseInt(filmCountInput.value, 10);
+    if (!val || val < 1) return;
+    ficount = val;
+    fiposn  = 1;
+    screenCount.classList.remove('active');
+    showFilmScreen();
+  });
 
+  // ── FILM SCREEN SETUP ────────────────────────────────────────
+  function showFilmScreen() {
+    const ordinals = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth'];
+    const ordinal  = ordinals[(fiposn - 1)] || `#${fiposn}`;
+    const plural   = ficount > 1;
+
+    filmHeadline.textContent = plural
+      ? 'Which films are we feeding the cave today?'
+      : 'Which film are we feeding the cave today?';
+
+    filmSubline.textContent = ficount > 1
+      ? `Roll ${fiposn} of ${ficount} — the ${ordinal} one.`
+      : 'Start typing — the name, the make, anything.';
+
+    filmPos.textContent = ficount > 1
+      ? `film ${fiposn} · of ${ficount}`
+      : '';
+
+    filmSearch.placeholder = randomPlaceholder;
+    screenFilm.classList.add('active');
+    filmSearch.focus();
+  }
+
+  // ── HELPERS ──────────────────────────────────────────────────
   function escapeHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -556,25 +678,22 @@
     );
   }
 
+  // ── TYPEAHEAD ────────────────────────────────────────────────
   function openDropdown(query) {
     const q = query.trim().toLowerCase();
     if (!q) { closeDropdown(); return; }
-
     currentItems = [...FILMS.filter(f => f.search.includes(q)), FALLBACK];
     dropdown.innerHTML = '';
     activeIndex = -1;
-
     currentItems.forEach((film, i) => {
       const div = document.createElement('div');
-      div.className = 'dropdown-item' + (film.isGufa ? ' gufa-item' : '') + (film.isFallback ? ' fallback-item' : '');
-      div.innerHTML = `<span class="film-name">${film.isFallback ? film.display : highlight(film.display, query.trim())}</span>`;
-      div.addEventListener('mousedown', e => {
-        e.preventDefault();
-        selectFilm(film);
-      });
+      div.className = 'dropdown-item' +
+        (film.isGufa     ? ' gufa-item'    : '') +
+        (film.isFallback ? ' fallback-item' : '');
+      div.innerHTML = `<span>${film.isFallback ? film.display : highlight(film.display, query.trim())}</span>`;
+      div.addEventListener('mousedown', e => { e.preventDefault(); selectFilm(film); });
       dropdown.appendChild(div);
     });
-
     dropdown.classList.add('open');
   }
 
@@ -582,26 +701,33 @@
     dropdown.classList.remove('open');
     dropdown.innerHTML = '';
     currentItems = [];
-    activeIndex = -1;
+    activeIndex  = -1;
   }
 
   function selectFilm(film) {
     selectedFilm = film;
-    input.value = film.display;
+    filmSearch.value = film.display;
     closeDropdown();
-    badge.textContent = '✦ ' + film.display + ' — selected';
-    badge.classList.add('visible');
+    selectedBadge.textContent = film.isFallback
+      ? '✦ we\'ll figure it out together'
+      : `✦ ${film.display} — selected`;
+    selectedBadge.classList.add('visible');
     continueBtn.classList.add('ready');
+    continueBtn.textContent = fiposn < ficount ? 'Next film →' : 'Done — review order';
   }
 
-  function clearSelection() {
+  filmSearch.addEventListener('input', () => {
     selectedFilm = null;
-    badge.classList.remove('visible');
+    selectedBadge.classList.remove('visible');
     continueBtn.classList.remove('ready');
-  }
+    openDropdown(filmSearch.value);
+  });
 
-  // keyboard nav
-  input.addEventListener('keydown', e => {
+  filmSearch.addEventListener('focus', () => {
+    if (filmSearch.value && !selectedFilm) openDropdown(filmSearch.value);
+  });
+
+  filmSearch.addEventListener('keydown', e => {
     if (!dropdown.classList.contains('open')) return;
     const items = dropdown.querySelectorAll('.dropdown-item');
     if (e.key === 'ArrowDown') {
@@ -615,33 +741,29 @@
       items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (activeIndex >= 0 && currentItems[activeIndex]) {
-        selectFilm(currentItems[activeIndex]);
-      }
+      if (activeIndex >= 0 && currentItems[activeIndex]) selectFilm(currentItems[activeIndex]);
     } else if (e.key === 'Escape') {
       closeDropdown();
     }
-  });
-
-  input.addEventListener('input', () => {
-    clearSelection();
-    openDropdown(input.value);
-  });
-
-  input.addEventListener('focus', () => {
-    if (input.value && !selectedFilm) openDropdown(input.value);
   });
 
   document.addEventListener('click', e => {
     if (!e.target.closest('.search-wrap')) closeDropdown();
   });
 
+  // ── CONTINUE ────────────────────────────────────────────────
   continueBtn.addEventListener('click', () => {
     if (!selectedFilm) return;
-    const params = new URLSearchParams({ film: selectedFilm.display });
-    if (orderValue) params.set('order value', orderValue);
-    if (snum)       params.set('snum',  snum);
-    if (sname)      params.set('sname', sname);
+    const params = new URLSearchParams();
+    params.set('sfilm',   selectedFilm.display);
+    params.set('fipro',   selectedFilm.pro   || '');
+    params.set('fisize',  selectedFilm.size  || '');
+    params.set('1cart',   selectedFilm.price);
+    params.set('ficount', ficount);
+    params.set('fiposn',  fiposn);
+    if (snum)  params.set('snum',  snum);
+    if (sname) params.set('sname', sname);
+    if (gfid)  params.set('gfid',  gfid);
     window.location.href = `${TALLY_URL}?${params.toString()}`;
   });
 </script>
