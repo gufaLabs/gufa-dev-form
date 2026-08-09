@@ -1,1 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cart — gufa.Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#e8e4e0;
+      --card:#fafaf8;
+      --card-border:#dedad5;
+      --topbar-start:#7a4e0e;
+      --topbar-mid:#c8922a;
+      --topbar-light:#e8b050;
+      --amber:#c8922a;
+      --text:#3a3028;
+      --label:#a89880;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Georgia,serif}
+    .topbar{height:5px;background:linear-gradient(90deg,var(--topbar-start),var(--topbar-mid),var(--topbar-light),var(--topbar-mid),var(--topbar-start));}
+    .wrap{min-height:calc(100vh - 5px);display:flex;align-items:center;justify-content:center;padding:2rem}
+    .card{width:100%;max-width:720px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:28px 32px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .hero{font-family:'Instrument Serif', 'IM Fell English', serif;font-style:italic;font-size:1.6rem;margin:0 0 6px}
+    .gfline{color:var(--label);font-family:Lora, serif;font-size:0.9rem;margin-bottom:8px}
+    .gfline .muted{color:#7b7368;font-style:italic}
+    .summary{font-style:italic;color:#72685f;margin:12px 0 18px}
+    .total{font-weight:700;color:var(--amber);font-size:2rem;margin:8px 0}
+    .label{font-family:Lora,serif;color:var(--label);text-transform:uppercase;font-size:9px;letter-spacing:1px}
 
+    .payments{display:flex;gap:12px;margin-top:18px}
+    .payopt{flex:1;padding:12px;border-radius:6px;border:1px solid #e0d9d0;background:#fff;cursor:pointer;text-align:center}
+    .payopt.selected{outline:3px solid rgba(200,146,42,0.12);border-color:var(--amber);box-shadow:0 6px 18px rgba(200,146,42,0.08)}
+    .payopt .title{font-family:Lora,serif;font-weight:700;color:var(--text);}
+    .payopt .fee{color:#6b6057;font-size:0.9rem;margin-top:6px}
+
+    .details{margin-top:16px}
+    .fee-line{color:var(--amber);font-weight:700;margin-top:10px}
+    .qr{max-width:240px;margin-top:12px;opacity:0;transition:opacity 320ms ease}
+    .qr.visible{opacity:1}
+    .upload{margin-top:10px}
+    .proceed{margin-top:12px;background:var(--amber);color:#fff;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+
+    .muted-small{color:#7b7368;font-size:0.95rem}
+    .foot{margin-top:18px;color:#7b7368;font-size:0.85rem}
+  </style>
+</head>
+<body>
+  <div class="topbar" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Order card">
+      <h1 class="hero">your order, <span id="namePlaceholder">—</span></h1>
+      <div class="gfline" id="gfidLine">GF.ID: <span id="gfidVal" class="muted">— assigned on confirmation</span></div>
+      <div class="summary" id="orderSummary">fetching your films...</div>
+      <div class="total">₹<span id="totalVal">0</span></div>
+
+      <div class="label">Payment method</div>
+      <div class="payments" role="tablist">
+        <div class="payopt" data-fee="0" id="opt-scan" role="button" tabindex="0">
+          <div class="title">Scan &amp; Pay UPI</div>
+          <div class="fee">no fee</div>
+        </div>
+        <div class="payopt" data-fee="2.5" id="opt-upi" role="button" tabindex="0">
+          <div class="title">UPI / Debit via Razorpay</div>
+          <div class="fee">2.5% fee</div>
+        </div>
+        <div class="payopt" data-fee="3.75" id="opt-cc" role="button" tabindex="0">
+          <div class="title">Credit Card via Razorpay</div>
+          <div class="fee">3.75% fee</div>
+        </div>
+      </div>
+
+      <div class="details" id="detailsArea">
+        <!-- fee and dynamic UI injected here -->
+      </div>
+
+      <div class="foot">Questions? Reply to your order email or contact us.</div>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const mcart = urlParams.get('mcart') || '0';
+    const sname = urlParams.get('sname') || '';
+    const snum  = urlParams.get('snum') || '';
+    const gfid  = urlParams.get('gfid') || '';
+
+    const namePlaceholder = document.getElementById('namePlaceholder');
+    const gfidVal = document.getElementById('gfidVal');
+    const gfidLine = document.getElementById('gfidLine');
+    const totalVal = document.getElementById('totalVal');
+    const orderSummary = document.getElementById('orderSummary');
+    const detailsArea = document.getElementById('detailsArea');
+
+    namePlaceholder.textContent = sname || '—';
+    if (gfid) { gfidVal.textContent = gfid; gfidVal.classList.remove('muted'); } else { gfidVal.textContent = '— assigned on confirmation'; gfidVal.classList.add('muted'); }
+
+    // show mcart as-is (no math)
+    totalVal.textContent = mcart;
+
+    // payments
+    const opts = Array.from(document.querySelectorAll('.payopt'));
+    let selected = null;
+
+    function clearSelection() {
+      opts.forEach(o => o.classList.remove('selected'));
+      detailsArea.innerHTML = '';
+      selected = null;
+    }
+
+    function formatCurrency(x){
+      const n = Number(x);
+      if (isNaN(n)) return x;
+      return n.toLocaleString('en-IN', {maximumFractionDigits:2});
+    }
+
+    function onSelect(opt){
+      clearSelection();
+      opt.classList.add('selected');
+      selected = opt;
+      const feePct = parseFloat(opt.dataset.fee) || 0;
+      const parsed = parseFloat(mcart) || 0;
+      const feeAmt = Math.round((parsed * feePct)/100 * 100)/100; // two decimals
+      const newTotal = (parsed + feeAmt);
+
+      const feeLine = document.createElement('div');
+      feeLine.className = 'fee-line';
+      feeLine.innerHTML = `Fee: ₹${formatCurrency(feeAmt)} &nbsp;&middot;&nbsp; Total: ₹${formatCurrency(newTotal)}`;
+      detailsArea.appendChild(feeLine);
+
+      if (opt.id === 'opt-scan'){
+        // show QR and upload
+        const img = document.createElement('img');
+        img.src = 'gufa-qr.png';
+        img.alt = 'gufa QR';
+        img.className = 'qr';
+        detailsArea.appendChild(img);
+        // fade in
+        requestAnimationFrame(()=> img.classList.add('visible'));
+
+        const upl = document.createElement('div');
+        upl.className = 'upload';
+        upl.innerHTML = `<label class="label">Upload payment screenshot</label><br><input type="file" accept="image/*" />`;
+        detailsArea.appendChild(upl);
+      } else {
+        const btn = document.createElement('button');
+        btn.className = 'proceed';
+        btn.textContent = 'Proceed to Pay';
+        btn.addEventListener('click', () => startRazorpay(parsed));
+        detailsArea.appendChild(btn);
+      }
+    }
+
+    opts.forEach(o => {
+      o.addEventListener('click', () => onSelect(o));
+      o.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(o); } });
+    });
+
+    // Mock summary fetch (placeholder behaviour)
+    setTimeout(()=>{ orderSummary.textContent = 'fetching your films...'; }, 200);
+
+    // Razorpay flow
+    function startRazorpay(amountNumber){
+      const amountPaise = Math.round((Number(amountNumber)||0) * 100);
+      const options = {
+        key: 'rzp_test_TNBKIhvQMxQLE1',
+        amount: amountPaise,
+        currency: 'INR',
+        name: sname || 'gufa.Labs',
+        prefill: { name: sname || '', contact: snum || '' },
+        theme: { color: '#c8922a' }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    // Accessibility: select first option by default
+    // (not auto-selecting; left to user)
+  </script>
+</body>
+</html>
