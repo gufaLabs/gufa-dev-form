@@ -791,14 +791,13 @@
   // ── CONTINUE ────────────────────────────────────────────────
   continueBtn.addEventListener('click', () => {
     if (!selectedFilm) return;
-    const mcartIn  = parseInt(urlParams.get('mcart') || '0', 10);
-    const newMcart = mcartIn + selectedFilm.price;
+    const mcartIn = urlParams.get('mcart') || '0';
     const params = new URLSearchParams();
     params.set('sfilm',   selectedFilm.display);
     params.set('fipro',   selectedFilm.pro   || '');
     params.set('fisize',  selectedFilm.size  || '');
     params.set('1cart',   selectedFilm.price);
-    params.set('mcart',   newMcart);
+    params.set('mcart',   mcartIn);
     params.set('ficount', ficount);
     params.set('fiposn',  fiposn);
     if (snum)  params.set('snum',  snum);
