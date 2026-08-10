@@ -6,7 +6,7 @@
   <title>gufa.Labs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@300;400&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -54,7 +54,7 @@
     }
 
     .gufa-wordmark {
-      font-family: 'IM Fell English', serif;
+      font-family: 'Instrument Serif', serif;
       font-style: italic;
       font-size: 20px;
       letter-spacing: 0.3em;
@@ -64,7 +64,7 @@
     }
 
     .gufa-devanagari {
-      font-family: 'Noto Serif Devanagari', serif;
+      font-family: 'Lora', serif;
       font-weight: 400;
       font-size: 22px;
       color: #c8a96e;
@@ -75,8 +75,20 @@
       position: relative;
     }
 
+    .gufa-translation {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: #6b5a3e;
+      letter-spacing: 0.12em;
+      text-align: center;
+      margin-top: -1.8rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
     .gufa-prompt {
-      font-family: 'IM Fell English', serif;
+      font-family: 'Instrument Serif', serif;
       font-style: italic;
       font-size: 15px;
       color: #3d3222;
@@ -84,6 +96,13 @@
       text-align: center;
       white-space: nowrap;
       position: relative;
+    }
+
+    .gufa-prompt-sub {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: #2e2718;
+      opacity: 0.7;
     }
 
     .gufa-input-wrap {
@@ -101,7 +120,7 @@
       border: none;
       border-bottom: 0.5px solid #3a3020;
       color: #c8a96e;
-      font-family: 'IM Fell English', serif;
+      font-family: 'Instrument Serif', serif;
       font-size: 26px;
       letter-spacing: 0.2em;
       padding: 10px 0;
@@ -238,26 +257,26 @@
     }
 
     .loading-hindi {
-      font-family: 'Noto Serif Devanagari', serif;
+      font-family: 'Lora', serif;
       font-size: 17px;
-      color: #6b5a3e;
+      color: #c8a96e;
       letter-spacing: 0.08em;
       text-align: center;
       animation: pulse-text 1.8s ease-in-out infinite;
     }
 
     .loading-english {
-      font-family: 'IM Fell English', serif;
+      font-family: 'Instrument Serif', serif;
       font-style: italic;
       font-size: 14px;
-      color: #3d3222;
+      color: #8a7355;
       letter-spacing: 0.1em;
       text-align: center;
       animation: pulse-text 1.8s ease-in-out infinite;
       animation-delay: 0.2s;
     }
 
-    @keyframes pulse-text { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @keyframes pulse-text { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
     .dots span { animation: blink 1.2s steps(1) infinite; color: #8a7355; }
     .dots span:nth-child(2) { animation-delay: 0.4s; }
@@ -273,7 +292,11 @@
     <div class="content-screen" id="contentScreen">
       <div class="gufa-wordmark">gufa.Labs</div>
       <div class="gufa-devanagari">यहाँ प्रकाश जन्म लेता है</div>
-      <div class="gufa-prompt">enter your number to step inside</div>
+      <div class="gufa-translation">where light is born</div>
+      <div class="gufa-prompt">
+        enter your number to step inside<br>
+        <span class="gufa-prompt-sub">out of india? cellphones require a country code</span>
+      </div>
       <div class="gufa-input-wrap">
         <input class="gufa-input" id="phoneInput" type="tel" placeholder="· · · · · · · · · ·" maxlength="15" />
         <div class="enter-btn-wrap">
@@ -321,7 +344,10 @@
       return n;
     }
 
-    function isReady() { return input.value.trim().length >= 10; }
+    function isReady() {
+      const val = input.value.trim().replace(/\s/g, '');
+      return val.length >= 7 && /^\+?\d+$/.test(val);
+    }
 
     function updateBtn() {
       enterBtn.classList.toggle('ready', isReady());

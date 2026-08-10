@@ -6,49 +6,30 @@
   <title>gufa.Labs — Which film?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Lora:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a0908;
-      --amber:     #c8922a;
-      --amber-dim: #7a5518;
-      --amber-glow:#c8922a33;
-      --text:      #e8dcc8;
-      --text-dim:  #7a6e60;
-      --surface:   #131110;
-      --border:    #2a2420;
+      --bg: #dedad5;
+      --amber: #c8922a;
+      --amber-dim: #9a6e2a;
+      --amber-glow: #c8922a33;
+      --text: #2a2218;
+      --text-dim: #7a6040;
+      --surface: #f0ece8;
+      --border: #c8b89a;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       overflow-x: hidden;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      background-size: 180px;
-      opacity: 0.55;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 60%, transparent 30%, #0a090888 80%, #0a0908ee 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
 
     .stage {
       position: relative;
@@ -62,7 +43,7 @@
     }
 
     .eyebrow {
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.78rem;
       letter-spacing: 0.18em;
@@ -73,7 +54,7 @@
     }
 
     .headline {
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: clamp(1.5rem, 4vw, 2.2rem);
       color: var(--text);
@@ -85,7 +66,7 @@
     }
 
     .subline {
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.85rem;
       color: var(--text-dim);
@@ -99,7 +80,7 @@
       flex-direction: column;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 2.4rem;
+      margin-bottom: 0.8rem;
     }
 
     .count-input {
@@ -109,7 +90,7 @@
       border-radius: 2px;
       padding: 0.7rem 1rem;
       color: var(--text);
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 1.6rem;
       letter-spacing: 0.08em;
@@ -129,7 +110,7 @@
     }
 
     .count-nudge {
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.82rem;
       color: var(--amber-dim);
@@ -145,7 +126,7 @@
 
     /* ── film position indicator ── */
     .film-pos {
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.78rem;
       letter-spacing: 0.14em;
@@ -168,7 +149,7 @@
       border-radius: 2px;
       padding: 1rem 1.2rem;
       color: var(--text);
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 1.05rem;
       letter-spacing: 0.02em;
@@ -193,7 +174,7 @@
       top: calc(100% + 4px);
       left: 0;
       right: 0;
-      background: #16130f;
+      background: #fafaf8;
       border: 1px solid var(--border);
       border-radius: 2px;
       max-height: 260px;
@@ -209,10 +190,10 @@
     .dropdown-item {
       padding: 0.75rem 1.2rem;
       cursor: pointer;
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.95rem;
-      color: var(--text-dim);
+      color: #5a4a32;
       border-bottom: 1px solid #1e1a16;
       transition: background 0.12s, color 0.12s;
     }
@@ -221,8 +202,8 @@
 
     .dropdown-item:hover,
     .dropdown-item.active {
-      background: #1e1a14;
-      color: var(--text);
+      background: #f0ece8;
+      color: #2a2218;
     }
 
     .dropdown-item.gufa-item { color: var(--amber-dim); }
@@ -251,7 +232,7 @@
     /* ── selected badge ── */
     .selected-badge {
       margin-top: 1rem;
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.85rem;
       color: var(--amber-dim);
@@ -265,12 +246,12 @@
 
     /* ── continue ── */
     .continue-btn {
-      margin-top: 2.4rem;
+      margin-top: 1.2rem;
       padding: 0.85rem 2.8rem;
       background: transparent;
       border: 1px solid var(--amber-dim);
       color: var(--amber);
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 1rem;
       letter-spacing: 0.08em;
@@ -298,7 +279,7 @@
       bottom: 1.8rem;
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'IM Fell English', Georgia, serif;
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
       font-size: 0.7rem;
       letter-spacing: 0.14em;
@@ -315,10 +296,6 @@
   <link rel="preconnect" href="https://tally.so">
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.basic.min.js"></script>
   <style>
-    /* Font overrides: hero uses Instrument Serif; all other text uses Lora */
-    html, body { font-family: 'Lora', Georgia, serif !important; }
-    .headline { font-family: 'Instrument Serif', Georgia, serif !important; }
-  </style>
 </head>
 <body>
 
